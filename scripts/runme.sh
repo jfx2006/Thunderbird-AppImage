@@ -29,6 +29,8 @@ APPDIR_DEST="${WORKSPACE}/AppDir"
 PRODUCT_DEST="${APPDIR_DEST}/thunderbird"
 DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
 
+find . -print
+
 mkdir -p "${ARTIFACTS_DIR}"
 rm -rf "${APPDIR_DEST}" && mkdir -p "${APPDIR_DEST}"
 
