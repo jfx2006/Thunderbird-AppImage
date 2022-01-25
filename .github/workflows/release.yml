@@ -10,7 +10,7 @@ on:
 
 jobs:
   Thunderbird:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         version: ['3.8']
@@ -59,7 +59,7 @@ jobs:
         path: 'thunderbird/dist'
 
   Thunderbird-Beta:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         version: ['3.8']
