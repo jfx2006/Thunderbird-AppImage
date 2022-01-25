@@ -5,7 +5,7 @@ set -xe
 : PRODUCT                       "${PRODUCT:=thunderbird}"
 : VERSION			"${VERSION:=91.5.1}"
 : BUILD_NUMBER			"${BUILD_NUMBER:=1}"
-: CANDIDATES_DIR		"${CANDIDATES_DIR:=https://ftp.mozilla.org/pub/thunderbird/candidates/}"
+: CANDIDATES_DIR		"${CANDIDATES_DIR:=https://ftp.mozilla.org/pub/thunderbird/candidates}"
 : L10N_LOCALES			"${L10N_LOCALES:=https://hg.mozilla.org/releases/comm-esr91/raw-file/tip/mail/locales/onchange-locales}"
 
 # Required env variables
