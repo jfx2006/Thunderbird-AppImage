@@ -17,7 +17,7 @@ test "$L10N_LOCALES"
 WORKSPACE="$(pwd)"
 SCRIPT_DIRECTORY="${WORKSPACE}/scripts"
 ARTIFACTS_DIR="${WORKSPACE}/artifacts"
-APPIMAGETOOL_PATH=${SCRIPT_DIRECTORY}/appimagetool/usr/bin
+APPIMAGETOOL_PATH=${WORKSPACE}/appimagetool/usr/bin
 APPIMAGETOOL=${APPIMAGETOOL_PATH}/appimagetool
 
 # appimagetool needs to find desktop-file-validate in $PATH
@@ -28,8 +28,6 @@ TARGET_FULL_PATH="$ARTIFACTS_DIR/$TARGET"
 APPDIR_DEST="${WORKSPACE}/AppDir"
 PRODUCT_DEST="${APPDIR_DEST}/thunderbird"
 DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
-
-find . -print
 
 mkdir -p "${ARTIFACTS_DIR}"
 rm -rf "${APPDIR_DEST}" && mkdir -p "${APPDIR_DEST}"
