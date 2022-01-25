@@ -17,11 +17,11 @@ jobs:
 
     - name: AppImageTool download
       run: |
-        ./appimage/download_appimagetool.sh
+        ./scripts/download_appimagetool.sh
 
     - name: runme.sh
       run: |
-        ./appimage/runme.sh
+        ./scripts/runme.sh
 
 #     - name: Download Thunderbird
 #       run: |
