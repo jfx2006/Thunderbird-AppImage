@@ -3,16 +3,14 @@
 set -xe
 
 : PRODUCT                       "${PRODUCT:=thunderbird}"
-: VERSION			"${VERSION:=91.5.1}"
-: BUILD_NUMBER			"${BUILD_NUMBER:=1}"
-: CANDIDATES_DIR		"${CANDIDATES_DIR:=https://ftp.mozilla.org/pub/thunderbird/candidates}"
-: L10N_LOCALES			"${L10N_LOCALES:=https://hg.mozilla.org/releases/comm-esr91/raw-file/tip/mail/locales/onchange-locales}"
 
 # Required env variables
 test "$VERSION"
 test "$BUILD_NUMBER"
-test "$CANDIDATES_DIR"
-test "$L10N_LOCALES"
+test "$REPO"
+
+CANDIDATES_DIR="https://ftp.mozilla.org/pub/${PRODUCT}/candidates"
+L10N_LOCALES="https://hg.mozilla.org/releases/comm-${REPO}/raw-file/tip/mail/locales/onchange-locales"
 
 WORKSPACE="$(pwd)"
 SCRIPT_DIRECTORY="${WORKSPACE}/scripts"
@@ -38,17 +36,13 @@ $CURL -o "${WORKSPACE}/${PRODUCT}.tar.bz2" \
     "${CANDIDATES_DIR}/${VERSION}-candidates/build${BUILD_NUMBER}/linux-x86_64/en-US/${PRODUCT}-${VERSION}.tar.bz2"
 tar -C "${APPDIR_DEST}" --strip-components=1 -xf "${WORKSPACE}/${PRODUCT}.tar.bz2"
 
-# Symlink used for launching
-#mkdir -p "${APPDIR_DEST}/usr/bin"
-#ln -s ../../${PRODUCT}/${PRODUCT} "${APPDIR_DEST}/usr/bin/"
-
 DISTRIBUTION_DIR="${APPDIR_DEST}/distribution"
 mkdir -p "${DISTRIBUTION_DIR}"
 
 cp -v "${SCRIPT_DIRECTORY}/${DESKTOP_FILE}" "${APPDIR_DEST}"
 cp -v "${APPDIR_DEST}/chrome/icons/default/default256.png" "${APPDIR_DEST}/net.thunderbird.thunderbird.png"
 
-# Add a group policy file to disable app updates, as those are handled by snapd
+# Add a group policy file to disable app updates
 cp -v "${SCRIPT_DIRECTORY}/policies.json" "${DISTRIBUTION_DIR}"
 
 cp -v "${SCRIPT_DIRECTORY}/AppRun" "${APPDIR_DEST}"
@@ -65,7 +59,9 @@ for locale in ${locales}; do
 done
 
 cd ${WORKSPACE}
-${APPIMAGETOOL} -n --comp xz ${APPDIR_DEST} ${TARGET}
+${APPIMAGETOOL} -n --comp xz \
+	-u "gh-releases-zsync|jfx2006|thunderbird-appimage|${REPO}|Thunderbird*.AppImage.zsync" \
+	${APPDIR_DEST} ${TARGET}
 
 chmod +x ${TARGET}
 
