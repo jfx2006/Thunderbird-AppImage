@@ -7,10 +7,10 @@ set -xe
 # Required env variables
 test "$VERSION"
 test "$BUILD_NUMBER"
-test "$REPO"
+test "$PROJECT"
 
 CANDIDATES_DIR="https://ftp.mozilla.org/pub/${PRODUCT}/candidates"
-L10N_LOCALES="https://hg.mozilla.org/releases/comm-${REPO}/raw-file/tip/mail/locales/onchange-locales"
+L10N_LOCALES="https://hg.mozilla.org/releases/comm-${PROJECT}/raw-file/tip/mail/locales/onchange-locales"
 
 WORKSPACE="$(pwd)"
 SCRIPT_DIRECTORY="${WORKSPACE}/scripts"
@@ -60,7 +60,7 @@ done
 
 cd ${WORKSPACE}
 ${APPIMAGETOOL} -n --comp xz \
-	-u "gh-releases-zsync|jfx2006|thunderbird-appimage|${REPO}|Thunderbird*.AppImage.zsync" \
+	-u "gh-releases-zsync|jfx2006|thunderbird-appimage|${PROJECT}|Thunderbird*.AppImage.zsync" \
 	${APPDIR_DEST} ${TARGET}
 
 chmod +x ${TARGET}
