@@ -38,7 +38,7 @@ jobs:
       env:
         REPO: ${{ github.event.inputs.repo }}
         VERSION: ${{ github.event.inputs.version }}
-        BUILD_NUM: ${{ github.event.inputs.buildnum }}
+        BUILD_NUMBER: ${{ github.event.inputs.buildnum }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
