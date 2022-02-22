@@ -21,11 +21,11 @@ APPIMAGETOOL=${APPIMAGETOOL_PATH}/appimagetool
 # appimagetool needs to find desktop-file-validate in $PATH
 export PATH=$PATH:$APPIMAGETOOL_PATH
 
-if [[ "PROJECT" =~ ^esr ]]; then
+if [[ "$PROJECT" =~ ^esr ]]; then
   DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
   ICON_FILE="net.thunderbird.Thunderbird.png"
   APPSTREAM="net.thunderbird.Thunderbird.appdata.xml"
-elif [[ "PROJECT" =~ ^beta ]]; then
+elif [[ "$PROJECT" =~ ^beta ]]; then
   DESKTOP_FILE="net.thunderbird.ThunderbirdBeta.desktop"
   ICON_FILE="net.thunderbird.ThunderbirdBeta.png"
   APPSTREAM="net.thunderbird.ThunderbirdBeta.appdata.xml"
