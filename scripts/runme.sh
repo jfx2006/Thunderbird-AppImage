@@ -55,6 +55,8 @@ cp -v "${SCRIPT_DIRECTORY}/${ICON_FILE}" "${APPDIR_DEST}/"
 
 # Add a group policy file to disable app updates
 cp -v "${SCRIPT_DIRECTORY}/policies.json" "${DISTRIBUTION_DIR}"
+# distribution.ini
+cp -v "${SCRIPT_DIRECTORY}/distribution.ini" "${DISTRIBUTION_DIR}"
 
 cp -v "${SCRIPT_DIRECTORY}/AppRun" "${APPDIR_DEST}"
 
