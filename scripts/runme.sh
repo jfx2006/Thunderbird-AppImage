@@ -21,9 +21,21 @@ APPIMAGETOOL=${APPIMAGETOOL_PATH}/appimagetool
 # appimagetool needs to find desktop-file-validate in $PATH
 export PATH=$PATH:$APPIMAGETOOL_PATH
 
+if [[ "PROJECT" =~ ^esr ]]; then
+  DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
+  ICON_FILE="net.thunderbird.Thunderbird.png"
+  APPSTREAM="net.thunderbird.Thunderbird.appdata.xml"
+elif [[ "PROJECT" =~ ^beta ]]; then
+  DESKTOP_FILE="net.thunderbird.ThunderbirdBeta.desktop"
+  ICON_FILE="net.thunderbird.ThunderbirdBeta.png"
+  APPSTREAM="net.thunderbird.ThunderbirdBeta.appdata.xml"
+else
+  echo "Invalid project $PROJECT."
+  exit 66
+fi
+
 TARGET="Thunderbird-${VERSION}.AppImage"
 APPDIR_DEST="${WORKSPACE}/AppDir"
-DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
 
 mkdir -p "${ARTIFACTS_DIR}"
 rm -rf "${APPDIR_DEST}" && mkdir -p "${APPDIR_DEST}"
@@ -38,8 +50,8 @@ tar -C "${APPDIR_DEST}" --strip-components=1 -xf "${WORKSPACE}/${PRODUCT}.tar.bz
 DISTRIBUTION_DIR="${APPDIR_DEST}/distribution"
 mkdir -p "${DISTRIBUTION_DIR}"
 
-cp -v "${SCRIPT_DIRECTORY}/${DESKTOP_FILE}" "${APPDIR_DEST}"
-cp -v "${APPDIR_DEST}/chrome/icons/default/default256.png" "${APPDIR_DEST}/net.thunderbird.thunderbird.png"
+cp -v "${SCRIPT_DIRECTORY}/${DESKTOP_FILE}" "${APPDIR_DEST}/"
+cp -v "${SCRIPT_DIRECTORY}/${ICON_FILE}" "${APPDIR_DEST}/"
 
 # Add a group policy file to disable app updates
 cp -v "${SCRIPT_DIRECTORY}/policies.json" "${DISTRIBUTION_DIR}"
@@ -53,12 +65,15 @@ locales=$(cat ${WORKSPACE}/l10n_locales)
 
 mkdir -p "${DISTRIBUTION_DIR}/extensions"
 for locale in ${locales}; do
-    $CURL -o "${APPDIR_DEST}/distribution/extensions/langpack-${locale}@${PRODUCT}.mozilla.org.xpi" \
+    $CURL -o "${DISTRIBUTION_DIR}/extensions/langpack-${locale}@${PRODUCT}.mozilla.org.xpi" \
         "${CANDIDATES_DIR}/${VERSION}-candidates/build${BUILD_NUMBER}/linux-x86_64/xpi/${locale}.xpi"
 done
 
+mkdir -p "${APPDIR_DEST}/usr/share/metainfo"
+cp -v "${SCRIPT_DIRECTORY}/${APPSTREAM}" "${APPDIR_DEST}/usr/share/metainfo/"
+
 cd ${WORKSPACE}
-${APPIMAGETOOL} -n --comp xz \
+${APPIMAGETOOL} -v --comp xz \
 	-u "gh-releases-zsync|jfx2006|thunderbird-appimage|${PROJECT}|Thunderbird*.AppImage.zsync" \
 	${APPDIR_DEST} ${TARGET}
 

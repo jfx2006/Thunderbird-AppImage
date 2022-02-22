@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Thunderbird (Beta)
+Name=Thunderbird Beta
 Comment=Send and receive mail with Thunderbird
 Comment[ast]=Lleer y escribir corréu electrónicu
 Comment[ca]=Llegiu i escriviu correu
@@ -55,17 +55,18 @@ GenericName[uk]=Поштова програма
 GenericName[vi]=Phần mềm khách quản lý thư điện tử
 GenericName[zh_CN]=邮件新闻客户端
 GenericName[zh_TW]=郵件用戶端
-Exec=thunderbird-bin %u
+Exec=thunderbird %u
+Icon=net.thunderbird.ThunderbirdBeta
 Terminal=false
 Type=Application
-Icon=thunderbird-beta
-Categories=Network;Email;
-MimeType=message/rfc822;x-scheme-handler/mailto;application/x-xpinstall;
+MimeType=message/rfc822;x-scheme-handler/mailto;application/x-xpinstall;text/calendar;
 StartupNotify=true
-Actions=ComposeMessage;OpenAddressBook;
+Categories=Network;Email;Calendar
+Actions=compose-message;open-addressbook;open-file;
+StartupWMClass=Thunderbird
 
-[Desktop Action ComposeMessage]
-Name=Write new message
+[Desktop Action compose-message]
+Name=Write New Message
 Name[ar]=اكتب رسالة جديدة
 Name[ast]=Redactar mensaxe nuevu
 Name[be]=Напісаць новы ліст
@@ -118,8 +119,8 @@ Name[zh_CN]=编写新消息
 Name[zh_TW]=寫一封新訊息
 Exec=thunderbird-bin -compose
 
-[Desktop Action OpenAddressBook]
-Name=Open address book
+[Desktop Action open-addressbook]
+Name=Open Address Book
 Name[ar]=افتح دفتر العناوين
 Name[ast]=Abrir llibreta de direiciones
 Name[be]=Адкрыць адрасную кнігу
@@ -171,3 +172,7 @@ Name[vi]=Mở sổ địa chỉ
 Name[zh_CN]=打开通讯录
 Name[zh_TW]=開啟通訊錄
 Exec=thunderbird -addressbook
+
+[Desktop Action open-file]
+Name=Open Email or ICS Calendar file
+Exec=thunderbird -file %u
