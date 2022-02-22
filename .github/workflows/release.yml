@@ -48,7 +48,7 @@ jobs:
     needs: [Thunderbird]
     runs-on: ubuntu-latest
     env:
-      release_tag: ${{ jobs.Thunderbird.env.PROJECT }}
+      release_tag: ${{ github.event.inputs.project }}
 
     steps:
     - uses: actions/download-artifact@v2
