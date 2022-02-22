@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       release_tag: ${{ github.event.inputs.project }}
+      release_version: ${{ github.event.inputs.version }}
 
     steps:
     - uses: actions/download-artifact@v2
@@ -65,16 +66,18 @@ jobs:
           echo "::error file=release.yml::Invalid project tag $release_tag"
           exit 77
         fi
+        pwd
+        ls -laR
 
     - name: Release
       uses: marvinpinto/action-automatic-releases@latest
       with:
-        title: Thunderbird ${{ env.release_title }} AppImage Builds
+        title: Thunderbird ${{ env.release_title }} AppImage ${{ env.release_version }}
         automatic_release_tag: ${{ env.release_tag }}
         prerelease: false
         draft: false
         files: |
-          public/*.AppImage
-          public/*.AppImage.zsync
+          *.AppImage
+          *.AppImage.zsync
         repo_token: ${{ secrets.GITHUB_TOKEN }}
 
