@@ -22,7 +22,6 @@ APPIMAGETOOL=${APPIMAGETOOL_PATH}/appimagetool
 export PATH=$PATH:$APPIMAGETOOL_PATH
 
 TARGET="Thunderbird-${VERSION}.AppImage"
-TARGET_FULL_PATH="$ARTIFACTS_DIR/$TARGET"
 APPDIR_DEST="${WORKSPACE}/AppDir"
 DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
 
@@ -65,4 +64,4 @@ ${APPIMAGETOOL} -n --comp xz \
 
 chmod +x ${TARGET}
 
-mv ${TARGET} ${TARGET}.zsync ${TARGET_FULL_PATH}
+mv ${TARGET} ${TARGET}.zsync ${ARTIFACTS_DIR}/
