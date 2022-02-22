@@ -9,6 +9,7 @@ on:
         type: choice
         options:
         - esr91
+        - beta
       version:
         description: Thunderbird version
         required: true
@@ -22,9 +23,10 @@ on:
 jobs:
   Thunderbird:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: ['3.8']
+    env:
+      PROJECT: ${{ github.event.inputs.project }}
+      VERSION: ${{ github.event.inputs.version }}
+      BUILD_NUMBER: ${{ github.event.inputs.buildnum }}
     steps:
     - uses: actions/checkout@v2
 
@@ -35,34 +37,44 @@ jobs:
     - name: runme.sh
       run: |
         ./scripts/runme.sh
-      env:
-        PROJECT: ${{ github.event.inputs.project }}
-        VERSION: ${{ github.event.inputs.version }}
-        BUILD_NUMBER: ${{ github.event.inputs.buildnum }}
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2
       with:
-        name: thunderbird-continuous-x86_64.AppImage
+        name: public
         path: 'artifacts/'
 
   Release:
     needs: [Thunderbird]
     runs-on: ubuntu-latest
+    env:
+      release_tag: ${{ jobs.Thunderbird.env.PROJECT }}
 
     steps:
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2
       with:
-        name: thunderbird-continuous-x86_64.AppImage
+        name: public
+
+    - name: Release Title
+      run: |
+        if [[ "$release_tag" =~ ^esr ]]; then
+          echo "release_title=Stable" >> $GITHUB_ENV
+        elif [[ "$release_tag" =~ ^beta ]]; then
+          echo "release_title=Beta" >> $GITHUB_ENV
+        else
+          echo "::error file=release.yml::Invalid project tag $release_tag"
+          exit 77
+        fi
 
     - name: Release
       uses: marvinpinto/action-automatic-releases@latest
       with:
-        title: Thunderbird Stable AppImage Builds
-        automatic_release_tag: esr91
+        title: Thunderbird ${{ env.release_title }} AppImage Builds
+        automatic_release_tag: ${{ env.release_tag }}
         prerelease: false
         draft: false
         files: |
-          thunderbird-continuous-x86_64.AppImage
+          public/*.AppImage
+          public/*.AppImage.zsync
         repo_token: ${{ secrets.GITHUB_TOKEN }}
 

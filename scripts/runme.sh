@@ -65,4 +65,4 @@ ${APPIMAGETOOL} -n --comp xz \
 
 chmod +x ${TARGET}
 
-mv ${TARGET} ${TARGET_FULL_PATH}
+mv ${TARGET} ${TARGET}.zsync ${TARGET_FULL_PATH}
