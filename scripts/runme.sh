@@ -10,7 +10,7 @@ test "$BUILD_NUMBER"
 test "$PROJECT"
 
 CANDIDATES_DIR="https://ftp.mozilla.org/pub/${PRODUCT}/candidates"
-L10N_LOCALES="https://hg.mozilla.org/releases/comm-${PROJECT}/raw-file/tip/mail/locales/onchange-locales"
+L10N_LOCALES="https://hg.mozilla.org/releases/${PROJECT}/raw-file/tip/mail/locales/onchange-locales"
 
 WORKSPACE="$(pwd)"
 SCRIPT_DIRECTORY="${WORKSPACE}/scripts"
@@ -21,16 +21,16 @@ APPIMAGETOOL=${APPIMAGETOOL_PATH}/appimagetool
 # appimagetool needs to find desktop-file-validate in $PATH
 export PATH=$PATH:$APPIMAGETOOL_PATH
 
-if [[ "$PROJECT" =~ ^esr ]]; then
+if [[ "${PROJECT}" =~ ^comm-esr ]]; then
   DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
   ICON_FILE="net.thunderbird.Thunderbird.png"
   APPSTREAM="net.thunderbird.Thunderbird.appdata.xml"
-elif [[ "$PROJECT" =~ ^beta ]]; then
+elif [[ "${PROJECT}" = comm-beta ]]; then
   DESKTOP_FILE="net.thunderbird.ThunderbirdBeta.desktop"
   ICON_FILE="net.thunderbird.ThunderbirdBeta.png"
   APPSTREAM="net.thunderbird.ThunderbirdBeta.appdata.xml"
 else
-  echo "Invalid project $PROJECT."
+  echo "Invalid project ${PROJECT}."
   exit 66
 fi
 

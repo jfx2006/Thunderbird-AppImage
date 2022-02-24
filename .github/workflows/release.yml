@@ -8,8 +8,8 @@ on:
         required: true
         type: choice
         options:
-        - esr91
-        - beta
+        - comm-esr91
+        - comm-beta
       version:
         description: Thunderbird version
         required: true
@@ -58,9 +58,9 @@ jobs:
 
     - name: Release Title
       run: |
-        if [[ "$release_tag" =~ ^esr ]]; then
+        if [[ "$release_tag" =~ ^comm-esr ]]; then
           echo "release_title=Stable" >> $GITHUB_ENV
-        elif [[ "$release_tag" =~ ^beta ]]; then
+        elif [[ "$release_tag" = comm-beta ]]; then
           echo "release_title=Beta" >> $GITHUB_ENV
         else
           echo "::error file=release.yml::Invalid project tag $release_tag"
