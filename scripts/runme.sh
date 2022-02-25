@@ -7,10 +7,10 @@ set -xe
 # Required env variables
 test "$VERSION"
 test "$BUILD_NUMBER"
-test "$PROJECT"
+test "$RELEASE_TAG"
 
 CANDIDATES_DIR="https://ftp.mozilla.org/pub/${PRODUCT}/candidates"
-L10N_LOCALES="https://hg.mozilla.org/releases/${PROJECT}/raw-file/tip/mail/locales/onchange-locales"
+L10N_LOCALES="https://hg.mozilla.org/releases/${RELEASE_TAG}/raw-file/tip/mail/locales/onchange-locales"
 
 WORKSPACE="$(pwd)"
 SCRIPT_DIRECTORY="${WORKSPACE}/scripts"
@@ -21,16 +21,16 @@ APPIMAGETOOL=${APPIMAGETOOL_PATH}/appimagetool
 # appimagetool needs to find desktop-file-validate in $PATH
 export PATH=$PATH:$APPIMAGETOOL_PATH
 
-if [[ "${PROJECT}" =~ ^comm-esr ]]; then
+if [[ "${RELEASE_TAG}" =~ ^esr ]]; then
   DESKTOP_FILE="net.thunderbird.Thunderbird.desktop"
   ICON_FILE="net.thunderbird.Thunderbird.png"
   APPSTREAM="net.thunderbird.Thunderbird.appdata.xml"
-elif [[ "${PROJECT}" = comm-beta ]]; then
+elif [[ "${RELEASE_TAG}" = beta ]]; then
   DESKTOP_FILE="net.thunderbird.ThunderbirdBeta.desktop"
   ICON_FILE="net.thunderbird.ThunderbirdBeta.png"
   APPSTREAM="net.thunderbird.ThunderbirdBeta.appdata.xml"
 else
-  echo "Invalid project ${PROJECT}."
+  echo "Invalid release tag ${RELEASE_TAG}."
   exit 66
 fi
 
@@ -63,7 +63,7 @@ cp -v "${SCRIPT_DIRECTORY}/AppRun" "${APPDIR_DEST}"
 # Use list of locales to fetch L10N XPIs
 $CURL -o "${WORKSPACE}/l10n_locales" "${L10N_LOCALES}"
 sed -i -e '/^ja-JP-mac$/d' "${WORKSPACE}/l10n_locales"
-locales=$(cat ${WORKSPACE}/l10n_locales)
+locales=$(cat "${WORKSPACE}"/l10n_locales)
 
 mkdir -p "${DISTRIBUTION_DIR}/extensions"
 for locale in ${locales}; do
@@ -74,11 +74,11 @@ done
 mkdir -p "${APPDIR_DEST}/usr/share/metainfo"
 cp -v "${SCRIPT_DIRECTORY}/${APPSTREAM}" "${APPDIR_DEST}/usr/share/metainfo/"
 
-cd ${WORKSPACE}
+cd "${WORKSPACE}"
 ${APPIMAGETOOL} -v --comp xz \
-	-u "gh-releases-zsync|jfx2006|thunderbird-appimage|${PROJECT}|Thunderbird*.AppImage.zsync" \
-	${APPDIR_DEST} ${TARGET}
+	-u "gh-releases-zsync|jfx2006|thunderbird-appimage|${RELEASE_TAG}|Thunderbird*.AppImage.zsync" \
+	"${APPDIR_DEST}" "${TARGET}"
 
-chmod +x ${TARGET}
+chmod +x "${TARGET}"
 
-mv ${TARGET} ${TARGET}.zsync ${ARTIFACTS_DIR}/
+mv "${TARGET}" "${TARGET}.zsync" "${ARTIFACTS_DIR}/"

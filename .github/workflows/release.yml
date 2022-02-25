@@ -3,13 +3,13 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      project:
-        description: Repository shortname (beta/esr91)
+      release-tag:
+        description: Equivalent to "update channel" - beta, esr91
         required: true
         type: choice
         options:
-        - comm-esr91
-        - comm-beta
+        - esr91
+        - beta
       version:
         description: Thunderbird version
         required: true
@@ -24,7 +24,7 @@ jobs:
   Thunderbird:
     runs-on: ubuntu-latest
     env:
-      PROJECT: ${{ github.event.inputs.project }}
+      RELEASE_TAG: ${{ github.event.inputs.release-tag }}
       VERSION: ${{ github.event.inputs.version }}
       BUILD_NUMBER: ${{ github.event.inputs.buildnum }}
     steps:
@@ -48,7 +48,7 @@ jobs:
     needs: [Thunderbird]
     runs-on: ubuntu-latest
     env:
-      release_tag: ${{ github.event.inputs.project }}
+      release_tag: ${{ github.event.inputs.release-tag }}
       release_version: ${{ github.event.inputs.version }}
 
     steps:
@@ -58,12 +58,12 @@ jobs:
 
     - name: Release Title
       run: |
-        if [[ "$release_tag" =~ ^comm-esr ]]; then
+        if [[ "$release_tag" =~ ^esr ]]; then
           echo "release_title=Stable" >> $GITHUB_ENV
-        elif [[ "$release_tag" = comm-beta ]]; then
+        elif [[ "$release_tag" = beta ]]; then
           echo "release_title=Beta" >> $GITHUB_ENV
         else
-          echo "::error file=release.yml::Invalid project tag $release_tag"
+          echo "::error file=release.yml::Invalid release tag $release_tag"
           exit 77
         fi
         pwd
