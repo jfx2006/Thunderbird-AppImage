@@ -31,7 +31,7 @@ jobs:
       RELEASE_TAG: ${{ github.event.inputs.release-tag }}
       VERSION: ${{ github.event.inputs.version }}
       BUILD_NUMBER: ${{ github.event.inputs.buildnum }}
-      LOCALES: ${{ github.events.inputs.locales }}
+      LOCALES: ${{ github.event.inputs.locales }}
     steps:
     - uses: actions/checkout@v2
 
