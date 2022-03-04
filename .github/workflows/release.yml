@@ -18,6 +18,10 @@ on:
         description: Version build iteration
         required: true
         type: string
+      locales:
+        description: JSON list of langpacks to bundle
+        required: true
+        type: string
 
 
 jobs:
@@ -27,6 +31,7 @@ jobs:
       RELEASE_TAG: ${{ github.event.inputs.release-tag }}
       VERSION: ${{ github.event.inputs.version }}
       BUILD_NUMBER: ${{ github.event.inputs.buildnum }}
+      LOCALES: ${{ github.events.inputs.locales }}
     steps:
     - uses: actions/checkout@v2
 

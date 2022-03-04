@@ -8,9 +8,9 @@ set -xe
 test "$VERSION"
 test "$BUILD_NUMBER"
 test "$RELEASE_TAG"
+test "$LOCALES"
 
 CANDIDATES_DIR="https://ftp.mozilla.org/pub/${PRODUCT}/candidates"
-L10N_LOCALES="https://hg.mozilla.org/releases/${RELEASE_TAG}/raw-file/tip/mail/locales/onchange-locales"
 
 WORKSPACE="$(pwd)"
 SCRIPT_DIRECTORY="${WORKSPACE}/scripts"
@@ -52,21 +52,27 @@ mkdir -p "${DISTRIBUTION_DIR}"
 
 cp -v "${SCRIPT_DIRECTORY}/${DESKTOP_FILE}" "${APPDIR_DEST}/"
 cp -v "${SCRIPT_DIRECTORY}/${ICON_FILE}" "${APPDIR_DEST}/"
+mkdir -p "${APPDIR_DEST}/usr/share/icons/hicolor/128x128/apps"
+cp -v "${SCRIPT_DIRECTORY}/${ICON_FILE}" "${APPDIR_DEST}/usr/share/icons/hicolor/128x128/apps/"
 
 # Add a group policy file to disable app updates
 cp -v "${SCRIPT_DIRECTORY}/policies.json" "${DISTRIBUTION_DIR}"
 # distribution.ini
 cp -v "${SCRIPT_DIRECTORY}/distribution.ini" "${DISTRIBUTION_DIR}"
 
+# Default prefs
+mkdir -p "${APPDIR_DEST}/defaults/preferences"
+cp -v "${SCRIPT_DIRECTORY}/default-preferences.js" "${APPDIR_DEST}/defaults/preferences/"
+
 cp -v "${SCRIPT_DIRECTORY}/AppRun" "${APPDIR_DEST}"
 
 # Use list of locales to fetch L10N XPIs
-$CURL -o "${WORKSPACE}/l10n_locales" "${L10N_LOCALES}"
-sed -i -e '/^ja-JP-mac$/d' "${WORKSPACE}/l10n_locales"
-locales=$(cat "${WORKSPACE}"/l10n_locales)
+de_json_locales() {
+  echo "${LOCALES}" | jq -r -c '.[]'
+}
 
 mkdir -p "${DISTRIBUTION_DIR}/extensions"
-for locale in ${locales}; do
+for locale in $(de_json_locales); do
     $CURL -o "${DISTRIBUTION_DIR}/extensions/langpack-${locale}@${PRODUCT}.mozilla.org.xpi" \
         "${CANDIDATES_DIR}/${VERSION}-candidates/build${BUILD_NUMBER}/linux-x86_64/xpi/${locale}.xpi"
 done
@@ -76,7 +82,7 @@ cp -v "${SCRIPT_DIRECTORY}/${APPSTREAM}" "${APPDIR_DEST}/usr/share/metainfo/"
 
 cd "${WORKSPACE}"
 ${APPIMAGETOOL} -v --comp xz \
-	-u "gh-releases-zsync|jfx2006|thunderbird-appimage|${RELEASE_TAG}|Thunderbird*.AppImage.zsync" \
+	-u "gh-releases-zsync|thundernest|thunderbird-appimage|${RELEASE_TAG}|Thunderbird*.AppImage.zsync" \
 	"${APPDIR_DEST}" "${TARGET}"
 
 chmod +x "${TARGET}"

@@ -1,9 +1,10 @@
 <h1 align="center">
 	<img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Thunderbird_Logo%2C_2018.svg" alt="Firefox" height=200 width=200 align="middle">
-	Thunderbird AppImage
+	Thunderbird AppImages
 </h1>
 
-Mozilla Thunderbird Stable, Beta and Nightly (unofficial) AppImages by GitHub Actions Continuous Integration
+Mozilla Thunderbird Release and Beta (unofficial) AppImages by GitHub Actions
+Continuous Integration
 
 ## Get Started
 
