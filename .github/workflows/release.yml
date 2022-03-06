@@ -10,6 +10,7 @@ on:
         options:
         - esr91
         - beta
+        - try-c-c
       version:
         description: Thunderbird version
         required: true
