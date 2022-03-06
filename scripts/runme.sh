@@ -30,8 +30,9 @@ elif [[ "${RELEASE_TAG}" = beta ]]; then
   ICON_FILE="net.thunderbird.ThunderbirdBeta.png"
   APPSTREAM="net.thunderbird.ThunderbirdBeta.appdata.xml"
 else
-  echo "Invalid release tag ${RELEASE_TAG}."
-  exit 66
+  DESKTOP_FILE="net.thunderbird.ThunderbirdBeta.desktop"
+  ICON_FILE="net.thunderbird.ThunderbirdBeta.png"
+  APPSTREAM="net.thunderbird.ThunderbirdBeta.appdata.xml"
 fi
 
 TARGET="Thunderbird-${VERSION}.AppImage"
