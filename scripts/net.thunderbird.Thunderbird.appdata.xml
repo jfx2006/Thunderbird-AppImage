@@ -40,14 +40,12 @@
 
   <provides>
     <binary>thunderbird</binary>
-  </provides>
 
-  <mimetypes>
-    <mimetype>message/rfc822</mimetype>
-    <mimetype>x-scheme-handler/mailto</mimetype>
-    <mimetype>text/calendar</mimetype>
-    <mimetype>text/x-vcard</mimetype>
-  </mimetypes>
+    <mediatype>message/rfc822</mediatype>
+    <mediatype>x-scheme-handler/mailto</mediatype>
+    <mediatype>text/calendar</mediatype>
+    <mediatype>text/x-vcard</mediatype>
+  </provides>
 
   <!-- distributors: yes, this is a real person -->
   <update_contact>tb-builds@thunderbird.net</update_contact>
